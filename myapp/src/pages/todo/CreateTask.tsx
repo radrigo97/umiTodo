@@ -6,15 +6,15 @@ import React,{useState} from "react";
 function CreateTask(props: any) {
   const [form, setForm] = useState<any>('')
 
-  const addTask = () => {
+  const addTask = (form : any) => {
     props.createTask(form)
     setForm('')
   }
 
   return (
-    <div className={styles}>
+    <div className={styles.formTask}>
       <input type="text" value={form} onChange={event => setForm(event.target.value)}/>
-      <button onClick={addTask}>Create</button>
+      <button onClick={() => addTask(form)}>Create</button>
     </div>
   );
 }
@@ -22,8 +22,10 @@ function CreateTask(props: any) {
 
 
 const mapDispatchToProps = (dispatch: any) => ({
-  createTask: (form: any) => dispatch({type: 'List/create', payload: form})
+  createTask: (payload: {form: any}) => dispatch({type: 'List/addTask', payload}), //addTask это не эффект!это функция в редусере
 })
+
+
 
 
 export default connect(null, mapDispatchToProps)(CreateTask);

@@ -1,4 +1,5 @@
 import {Effect, Reducer} from 'umi';
+import {  select } from 'redux-saga/effects'
 
 
 export interface IState {
@@ -10,9 +11,11 @@ export interface IModel {
   state: IState,
   effects: {
     create: Effect;
+    delete: Effect;
   };
   reducers: {
     addTask: Reducer<IState>;
+    deleteTask: Reducer<IState>;
   };
 }
 
@@ -30,18 +33,34 @@ const Model : IModel = {
     *create(_, { call, put }) {
       yield put({type: 'addTask'})
     },
+
+    *delete(_, { call, put }) {
+      yield put({type: 'deleteTask'})
+    },
   },
 
   reducers: {
     addTask(state: any, {payload}: any) {
       const createTask = [...state.taskList]
       createTask.push({title: payload, id: Math.random()})
+      console.log(state.taskList)
       return {
         ...state,
         taskList: createTask
+      };
+    },
+
+    deleteTask(state: any, {payload}: any) {
+      const deleteTask = state.taskList.filter(el => el.id !== payload)
+      return {
+        ...state,
+        taskList: deleteTask
       };
     },
   },
 };
 
 export default Model;
+
+
+
